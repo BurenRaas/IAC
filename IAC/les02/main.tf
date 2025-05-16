@@ -28,7 +28,6 @@ resource "esxi_guest" "vmtest01" {
     virtual_network = "VM Network"
   }
   ovf_source       = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.ova"
-  guestos = "ubuntu-x64"
   memsize            = 1024
   numvcpus           = 1
   power              = "on"
