@@ -22,14 +22,15 @@ provider "esxi" {
 #
 
 resource "esxi_guest" "vmtest01" {
-  guest_name = "vmtest01" # Required, Specify the Guest Name
-  disk_store = "DS01"   # Required, Specify an existing Disk Store
+  guest_name = "vmtest01" 
+  disk_store = "DS01"   
   network_interfaces {
-    virtual_network = "VM Network" # Required for each network interface, Specify the Virtual Network name.
+    virtual_network = "VM Network"
   }
+  ovf_source       = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.ova"
   guestos = "ubuntu-x64"
-  memsize            = "2048"
-  numvcpus           = "2"
+  memsize            = 1024
+  numvcpus           = 1
   power              = "on"
 }
 
