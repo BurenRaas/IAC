@@ -6,8 +6,9 @@ terraform {
   }
 }
 
+#Dit staan in variables.tf
 provider "esxi" {
-  esxi_hostname = var.esxi_hostname
+ esxi_hostname = var.esxi_hostname 
   esxi_hostport = var.esxi_hostport
   esxi_hostssl  = var.esxi_hostssl
   esxi_username = var.esxi_username
@@ -17,7 +18,7 @@ provider "esxi" {
 #Web servers
 resource "esxi_guest" "webserver" {
   count        = 2
-  guest_name   = "webserver-${count.index + 1}"
+  guest_name   = "web-${count.index + 1}"
   disk_store   = "DS01"
   ovf_source   = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.ova"
   memsize      = 2048
@@ -30,8 +31,8 @@ resource "esxi_guest" "webserver" {
 }
 
 #DB server
-resource "esxi_guest" "databaseserver" {
-  guest_name   = "databaseserver"
+resource "esxi_guest" "DBserver" {
+  guest_name   = "DB01"
   disk_store   = "DS01"
   ovf_source   = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.ova"
   memsize      = 2048

@@ -4,8 +4,9 @@
 
 #  Change these defaults to fit your needs!
 
+
 variable "esxi_hostname" {
-  default = "ESX01.baas"
+  default = "192.168.20.14"
 }
 
 variable "esxi_hostport" {
