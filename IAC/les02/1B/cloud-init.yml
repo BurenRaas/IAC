@@ -1,6 +1,2 @@
 #cloud-config
-write_files:
-  - path: /home/iac/hello.txt
-    content: |
-      Hello World
 
