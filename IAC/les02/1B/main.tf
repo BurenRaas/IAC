@@ -2,13 +2,14 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+      version = "~> 4.0"
     }
   }
 }
 
 provider "azurerm" {
   features {}
+  subscription_id = "7c2cf771-1067-4e56-9047-4a218905ddaf" 
 }
 
 resource "azurerm_virtual_network" "vnet" {
