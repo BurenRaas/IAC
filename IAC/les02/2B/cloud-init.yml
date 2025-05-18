@@ -1,0 +1,11 @@
+#cloud-config
+users:
+  - name: iac
+    groups: sudo
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+
+write_files:
+  - path: /home/iac/hello.txt
+    content: |
+      Hello World
