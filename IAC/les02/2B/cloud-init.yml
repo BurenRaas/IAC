@@ -4,7 +4,8 @@ users:
     groups: sudo
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
-
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCeZHU4AXXtqThMdFG6VlKHXbJspUm7mzgG2jPalaFPaD/0aarG2k/UavLODYB9E3saNRa8lFHw3fLuFPw6wUm7XsWt6dx/sCYOdrI55kq87gVyCF/9kkpPXPvDMuu3V4pGghJr3g3FeAuSU7wWrLkccvrp6XJl6kePcZUpePCznb08qTJrEKfWysX63jWTjLF7ux5IzLrEIZHfgb6/HVB/K4BBC/NT6mzAKtyn1TCfJhaUJMwImLpYonAEkxXqv0PnpvqQ1ONnPEjHd3l5NZDzYAVGYFpFS37PJxKNJvXThfBktAPRX41EGDhO1+xpgxO3FK5glIjqdUAZyJLe8iYyXpJzgCxHoUi29o/TiKru4LU5FmlGG24UDs58VNtAN0LZpu0x89aMySrjfhgCGORV0GtASeLLSkCxVmZb6WwRs4d9O8gk8D7jTfslqWuHu1LSin8S7IWHjw4kpSMYKWAtti8q7K1i7OzQKkAgYtatBXszoE8Na46vK5DpnpySb+edyD6gbGkwbklhBD/VkNrnn57yJBBnoHdKmA4/BAprDKrbwfYnaAA6BIVmj9cZc7kR8WUD26ZeegeT+mM7wkBUY9osxDVFzSvKoLT04J+EL/XaL4slLFXVZwcoE0cIOWNmLO7iXNPDzwNDc5PpTYZaBjFuPKKFRCXqVHsWzNOQfw== student@s1190828-ubuntu
 write_files:
   - path: /home/iac/hello.txt
     content: |
