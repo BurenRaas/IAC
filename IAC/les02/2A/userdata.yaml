@@ -1,0 +1,11 @@
+#cloud-config
+users:
+  - name: student
+    groups: sudo
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC6aCtX2698MwtAe6m8Yl4cOiloJ/w7JNBSfV9i0uUSH student@s1190828-ubuntu
+packages:
+  - wget
+  - ntpdate
