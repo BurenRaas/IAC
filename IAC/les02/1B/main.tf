@@ -49,7 +49,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   admin_ssh_key {
     username   = "student"
-    public_key = file("~/.ssh/id_rsa_azure.pub")
+    public_key = file("~/.ssh/iac.pub")
   }
 
   os_disk {
