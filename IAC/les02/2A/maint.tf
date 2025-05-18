@@ -6,7 +6,7 @@ terraform {
   }
 }
 
-#Dit staan in variables.tf
+#Variables in variables.tf
 provider "esxi" {
  esxi_hostname = var.esxi_hostname 
   esxi_hostport = var.esxi_hostport
