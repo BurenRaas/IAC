@@ -9,7 +9,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "7c2cf771-1067-4e56-9047-4a218905ddaf"  # vervang met jouw ID
+  subscription_id = "7c2cf771-1067-4e56-9047-4a218905ddaf"  
 }
 
 #verwijzing voor de resourcegroup hier zodat deze niet steeds ingevuld hoeft te worden
