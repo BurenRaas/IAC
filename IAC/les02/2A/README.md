@@ -1,33 +1,46 @@
-# s1190828 Ruben Baas
-Opdracht 2A week 2
+# Opdracht 2A – Week 2    
+s1190828 Ruben Baas
 
-## Gebruikte bronnen:
-Repo terraform-provider-esxi/examples/05 CloudInit and Templates/ - https://github.com/josenk/terraform-provider-esxi/tree/master/examples/05%20CloudInit%20and%20Templates
-Repo terraform-provider-azurerm/examples/virtual-machines/linux/basic-ssh - https://github.com/hashicorp/terraform-provider-azurerm/blob/main/examples/virtual-machines/linux/basic-ssh/main.tf
-Cloud-init documentation - https://cloudinit.readthedocs.io/en/latest/tutorial/qemu.html#define-the-configuration-data-files
-Ansible inventory file using terraform - https://medium.com/@rajeshshukla_49087/ansible-inventory-file-using-terraform-b305db3ead2
-Lesstof week 2 - Week 2 - Hello, Terraform! @ leren.windewheim.nl
-AI prompt: genereer op basis van deze code een README.md
-AI prompt: met terraform en cloud-init, hoe krijg ik elk IP in een tekst bestand?
-AI prompt: kan ik ervoor zorgen dat de ips in 1 bestand terecht komen?
+---
 
-## Functionaliteit en configuratie
+## Beschrijving van de opdracht
 
-### VM's uitrollen op ESXi
+In deze opdracht wordt Terraform gebruikt om meerdere virtuele machines automatisch uit te rollen op een lokale ESXi-server. De machines worden geconfigureerd via cloud-init, waarmee een gebruiker en basissoftware worden ingesteld. Daarnaast worden de IP-adressen van de uitgerolde VM's verzameld in één tekstbestand. Het doel is om kennis te maken met Infrastructure as Code (IaC) en het automatiseren van VM-provisioning.
 
-Met onderstaande code worden 3 VM’s uitgerold via de `josenk/esxi` provider:
+---
 
-- **2x webserver** met namen `webserver-1` en `webserver-2`
-- **1x databaseserver** met naam `databaseserver`
+## Gebruikte bronnen  
+- [Terraform ESXi CloudInit code voorbeeld](https://github.com/josenk/terraform-provider-esxi/tree/master/examples/05%20CloudInit%20and%20Templates)  
+- [Terraform Azure VM basic SSH code voorbeeld](https://github.com/hashicorp/terraform-provider-azurerm/blob/main/examples/virtual-machines/linux/basic-ssh/main.tf)  
+- [Cloud-init documentatie configuration data files](https://cloudinit.readthedocs.io/en/latest/tutorial/qemu.html#define-the-configuration-data-files)  
+- [Ansible inventory file via Terraform medium.com](https://medium.com/@rajeshshukla_49087/ansible-inventory-file-using-terraform-b305db3ead2)  
+- Lesstof: *Week 2 - Hello, Terraform!* via leren.windesheim.nl  
+- **AI Prompts:**
+  - "met terraform en cloud-init, hoe krijg ik elk IP in een tekst bestand?"
+  - "kan ik ervoor zorgen dat de IP's in 1 bestand terecht komen?"
+  - "genereer op basis van deze code een README.md"
+https://chatgpt.com/share/682b6fd3-69f4-8007-8801-15a8e2bd56a9
 
-Elke VM krijgt:
+---
+
+## Functionaliteit en configuratie  
+
+### Uitrollen van VM’s op ESXi  
+Met de `terraform-provider-esxi` worden 3 VM’s uitgerold op de ESXi-server `192.168.20.14`:
+
+- **2x Webservers**: `webserver-1`, `webserver-2`  
+- **1x Databaseserver**: `databaseserver`  
+
+**Specificaties per VM:**
+- OS: Ubuntu 24.04 (via OVA Cloud Image)
 - 1 vCPU
 - 2048 MB RAM
-- Ubuntu 24.04 via cloud-image (.ova)
-- apparte vm naam door count.index + 1
+- Cloud-init configuratie voor user en packages
+- Automatisch unieke naamgeving via `count.index`
+
+#### Voorbeeld Terraform-code (webserver):
 
 ```hcl
-#Web servers
 resource "esxi_guest" "webserver" {
   count        = 2
   guest_name   = "webserver-${count.index + 1}"
@@ -40,38 +53,17 @@ resource "esxi_guest" "webserver" {
   network_interfaces {
     virtual_network = "VM Network"
   }
-    guestinfo = {
-    "userdata"          = filebase64("userdata.yaml")
-    "userdata.encoding" = "base64"
-  }
-}
 
-#DB server
-resource "esxi_guest" "databaseserver" {
-  guest_name   = "databaseserver"
-  disk_store   = "DS01"
-  ovf_source   = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.ova"
-  memsize      = 2048
-  numvcpus     = 1
-  power        = "on"
-
-  network_interfaces {
-    virtual_network = "VM Network"
-  }
-    guestinfo = {
+  guestinfo = {
     "userdata"          = filebase64("userdata.yaml")
     "userdata.encoding" = "base64"
   }
 }
 ```
 
-### cloud-init configuratie
+---
 
-De gebruikersconfiguratie wordt uitgevoerd via `userdata.yaml`. Hierin:
-- Wordt gebruiker `student` aangemaakt
-- Met `sudo`-rechten zonder wachtwoord
-- Wordt een ED25519 SSH-sleutel geplaatst
-- Worden de pakketten `wget` en `ntpdate` geïnstalleerd
+### Cloud-init configuratie (`userdata.yaml`)  
 
 ```yaml
 #cloud-config
@@ -88,21 +80,13 @@ packages:
   - ntpdate
 ```
 
-De cloud-init wordt meegegeven via het `guestinfo`-mechanisme:
-
-```hcl
-guestinfo = {
-  "userdata"          = filebase64("userdata.yaml")
-  "userdata.encoding" = "base64"
-}
-```
+Deze configuratie wordt met base64 meegegeven aan de VM via `guestinfo`.
 
 ---
 
+### IP-adressen verzamelen  
 
-### IP-adressen verzamelen in één bestand
-
-Na deployment worden de IP-adressen automatisch verzameld en opgeslagen in één tekstbestand via de `local_file` resource:
+Na de deployment worden de IP-adressen van de servers automatisch opgeslagen in `serverips.txt`:
 
 ```hcl
 resource "local_file" "all_ips" {
@@ -114,7 +98,7 @@ resource "local_file" "all_ips" {
 }
 ```
 
-Resultaat in `serverips.txt`:
+Voorbeeldoutput:
 ```
 192.168.20.21
 192.168.20.22
@@ -122,3 +106,18 @@ Resultaat in `serverips.txt`:
 ```
 
 ---
+
+## Uitvoeren van de code  
+
+Zorg dat je Terraform en toegang tot de ESXi-host hebt. Gebruik onderstaande stappen:
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+Na succesvolle deployment zijn de IP's te vinden in `serverips.txt`.
+
+---
+
